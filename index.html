@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cats!!</title>
+  <link rel="icon" type="image/png" href="icon.jpg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="app">
+    <h2>Paws & Preferences: Find Your Favourite Kittens!</h2>
+    <p>Swipe Right to Like, Left to Dislike</p>
+
+    <div class="card-container"></div>
+    <div class="summary" style="display:none;"></div>
+  </div>
+
+  <script>
+    const totalCats = 10;
+    let currentIndex = 0;
+    const likedCats = [];
+
+    const cardContainer = document.querySelector(".card-container");
+    const summaryDiv = document.querySelector(".summary");
+
+    const cats = Array.from({ length: totalCats }, (_, i) =>
+      `https://cataas.com/cat?${i}&w=600&h=600`
+    );
+
+    function showCard() {
+      if (currentIndex >= cats.length) {
+        showSummary();
+        return;
+      }
+
+      cardContainer.innerHTML = `
+        <div class="card">
+          <img src="${cats[currentIndex]}" draggable="false">
+        </div>
+      `;
+
+      const card = cardContainer.querySelector(".card");
+      let startX = null;
+
+      card.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+      card.addEventListener("touchend", e => {
+        const endX = e.changedTouches[0].clientX;
+        handleSwipe(endX - startX);
+        startX = null;
+      });
+
+      card.addEventListener("mousedown", e => startX = e.clientX);
+      document.addEventListener("mouseup", e => {
+        if (startX === null) return;
+        const endX = e.clientX;
+        handleSwipe(endX - startX);
+        startX = null;
+      });
+    }
+
+    function handleSwipe(diff) {
+      if (diff > 50) swipeLike();
+      else if (diff < -50) swipeDislike();
+    }
+
+    function swipeLike() {
+      animateCard("like", () => {
+        likedCats.push(cats[currentIndex]);
+        currentIndex++;
+        showCard();
+      });
+    }
+
+    function swipeDislike() {
+      animateCard("dislike", () => {
+        currentIndex++;
+        showCard();
+      });
+    }
+
+    function animateCard(animClass, callback) {
+      const card = cardContainer.querySelector(".card");
+      card.classList.add(animClass);
+      card.addEventListener("transitionend", callback, { once: true });
+    }
+
+    function showSummary() {
+      cardContainer.style.display = "none";
+      summaryDiv.style.display = "block";
+      summaryDiv.innerHTML = `
+        <h3>You liked ${likedCats.length} cats!</h3>
+        ${likedCats.map(url => `<img src="${url}">`).join("")}
+        <br><br>
+        <button class="restart">Restart</button>
+      `;
+
+      const restartBtn = summaryDiv.querySelector(".restart");
+      restartBtn.addEventListener("click", () => {
+        currentIndex = 0;
+        likedCats.length = 0;
+        cardContainer.style.display = "block";
+        summaryDiv.style.display = "none";
+        showCard();
+      });
+    }
+
+    showCard();
+  </script>
+</body>
+</html>

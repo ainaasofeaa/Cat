@@ -1,0 +1,112 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  background: url('cats.jpg');
+  background-size: calc(100% / 4) calc(100% / 3);
+  background-repeat: repeat;
+  background-position: center;
+}
+
+.app {
+  width: 95%;
+  max-width: 350px;
+  text-align: center;
+  padding: 15px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 12px;
+}
+
+h2 {
+  font-size: 30px;
+  margin-bottom: 5px;
+}
+
+p {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.card-container {
+  position: relative;
+  height: 300px;
+  margin-bottom: 20px;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  position: absolute;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  background: #fff;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+}
+
+.card.like {
+  transform: translateX(300px) rotate(15deg);
+  opacity: 0;
+}
+
+.card.dislike {
+  transform: translateX(-300px) rotate(-15deg);
+  opacity: 0;
+}
+
+
+.summary img {
+  width: 60px;
+  height: 60px;
+  margin: 3px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.summary button {
+  margin-top: 10px;
+  padding: 8px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #ff6f61;
+  color: white;
+}
+
+@media (min-width: 500px) {
+  .app {
+    max-width: 400px;
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 28px;
+  }
+
+  p {
+    font-size: 20px;
+  }
+
+  .card-container {
+    height: 350px;
+  }
+
+  .summary img {
+    width: 80px;
+    height: 80px;
+  }
+}
